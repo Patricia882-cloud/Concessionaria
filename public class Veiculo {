@@ -1,0 +1,257 @@
+public class Veiculo {
+    private String modelo;
+    private String fabricante;
+    private int anoFabricacao;
+    private String tipo; // Carro, Moto, Utilitário
+    private String status; // Disponível, Vendido
+
+    public Veiculo(String modelo, String fabricante, int anoFabricacao, String tipo) {
+        if (anoFabricacao > 2025) {
+            throw new IllegalArgumentException("Ano de fabricação inválido!");
+        }
+        this.modelo = modelo;
+        this.fabricante = fabricante;
+        this.anoFabricacao = anoFabricacao;
+        this.tipo = tipo;
+        this.status = "Disponível"; // Padrão
+    }
+
+    // Getters e Setters
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getFabricante() {
+        return fabricante;
+    }
+
+    public void setFabricante(String fabricante) {
+        this.fabricante = fabricante;
+    }
+
+    public int getAnoFabricacao() {
+        return anoFabricacao;
+    }
+
+    public void setAnoFabricacao(int anoFabricacao) {
+        if (anoFabricacao > 2025) {
+            throw new IllegalArgumentException("Ano de fabricação inválido!");
+        }
+        this.anoFabricacao = anoFabricacao;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Modelo: " + modelo + ", Fabricante: " + fabricante + ", Ano: " + anoFabricacao +
+               ", Tipo: " + tipo + ", Status: " + status;
+    }
+}
+
+
+public class Carro extends Veiculo {
+    private int portas;
+
+    public Carro(String modelo, String fabricante, int anoFabricacao, int portas) {
+        super(modelo, fabricante, anoFabricacao, "Carro");
+        this.portas = portas;
+    }
+
+    public int getPortas() {
+        return portas;
+    }
+
+    public void setPortas(int portas) {
+        this.portas = portas;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Portas: " + portas;
+    }
+}
+
+public class Moto extends Veiculo {
+    private int cilindradas;
+
+    public Moto(String modelo, String fabricante, int anoFabricacao, int cilindradas) {
+        super(modelo, fabricante, anoFabricacao, "Moto");
+        this.cilindradas = cilindradas;
+    }
+
+    public int getCilindradas() {
+        return cilindradas;
+    }
+
+    public void setCilindradas(int cilindradas) {
+        this.cilindradas = cilindradas;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Cilindradas: " + cilindradas;
+    }
+}
+
+public class Cliente {
+    private String nome;
+    private String CPF;
+    private String contato;
+
+    public Cliente(String nome, String CPF, String contato) {
+        if (!CPF.matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF inválido!");
+        }
+        this.nome = nome;
+        this.CPF = CPF;
+        this.contato = contato;
+    }
+
+    // Getters e Setters
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getCPF() {
+        return CPF;
+    }
+
+    public void setCPF(String CPF) {
+        if (!CPF.matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF inválido!");
+        }
+        this.CPF = CPF;
+    }
+
+    public String getContato() {
+        return contato;
+    }
+
+    public void setContato(String contato) {
+        this.contato = contato;
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", CPF: " + CPF + ", Contato: " + contato;
+    }
+}
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    private static ArrayList<Veiculo> veiculos = new ArrayList<>();
+    private static ArrayList<Cliente> clientes = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int opcao;
+
+        do {
+            System.out.println("\n=== Menu ===");
+            System.out.println("1 - Cadastrar Veículo");
+            System.out.println("2 - Cadastrar Cliente");
+            System.out.println("9 - Listar Veículos");
+            System.out.println("10 - Listar Clientes");
+            System.out.println("13 - Sair");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
+
+            switch (opcao) {
+                case 1:
+                    cadastrarVeiculo(scanner);
+                    break;
+                case 2:
+                    cadastrarCliente(scanner);
+                    break;
+                case 9:
+                    listarVeiculos();
+                    break;
+                case 10:
+                    listarClientes();
+                    break;
+                case 13:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida!");
+            }
+        } while (opcao != 13);
+
+        scanner.close();
+    }
+
+    private static void cadastrarVeiculo(Scanner scanner) {
+        System.out.print("Informe o modelo: ");
+        String modelo = scanner.nextLine();
+        System.out.print("Informe o fabricante: ");
+        String fabricante = scanner.nextLine();
+        System.out.print("Informe o ano de fabricação: ");
+        int anoFabricacao = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+        System.out.print("Informe o tipo (Carro/Moto): ");
+        String tipo = scanner.nextLine();
+
+        if (tipo.equalsIgnoreCase("Carro")) {
+            System.out.print("Informe o número de portas: ");
+            int portas = scanner.nextInt();
+            veiculos.add(new Carro(modelo, fabricante, anoFabricacao, portas));
+        } else if (tipo.equalsIgnoreCase("Moto")) {
+            System.out.print("Informe as cilindradas: ");
+            int cilindradas = scanner.nextInt();
+            veiculos.add(new Moto(modelo, fabricante, anoFabricacao, cilindradas));
+        } else {
+            System.out.println("Tipo inválido!");
+        }
+    }
+
+    private static void cadastrarCliente(Scanner scanner) {
+        System.out.print("Informe o nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Informe o CPF: ");
+        String CPF = scanner.nextLine();
+        System.out.print("Informe o contato: ");
+        String contato = scanner.nextLine();
+
+        clientes.add(new Cliente(nome, CPF, contato));
+    }
+
+    private static void listarVeiculos() {
+        System.out.println("\n=== Lista de Veículos ===");
+        for (Veiculo veiculo : veiculos) {
+            System.out.println(veiculo);
+        }
+    }
+
+    private static void listarClientes() {
+        System.out.println("\n=== Lista de Clientes ===");
+        for (Cliente cliente : clientes) {
+            System.out.println(cliente);
+        }
+    }
+}
